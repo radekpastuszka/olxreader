@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
@@ -68,7 +67,7 @@ namespace WorkerService1
 
                         int sellCount = Convert.ToInt32(sellString.Replace(" ", ""));
 
-                        newRow.Date = DateTime.Now;
+                        newRow.Date = DateTime.Now.Date;
 
                         switch(city.Key)
                         {
@@ -126,15 +125,19 @@ namespace WorkerService1
                     }
                 }
 
-                records.Add(newRow);
-
-                using (var writer = new StreamWriter(olxRentCsv))
-                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                if(!records.Any(x=> x.Date == newRow.Date))
                 {
-                    csv.WriteRecords(records);
+                    records.Add(newRow);
+
+                    using (var writer = new StreamWriter(olxRentCsv))
+                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                    {
+                        csv.WriteRecords(records);
+                    }
                 }
                 
-                await Task.Delay(1000*60*60, stoppingToken);
+                
+                await Task.Delay(1000*60*60*24, stoppingToken);
             }
         }
     }
