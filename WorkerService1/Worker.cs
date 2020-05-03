@@ -9,6 +9,7 @@ using CsvHelper;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using WorkerService1.Constants;
 using WorkerService1.Models;
 
 namespace WorkerService1
@@ -24,15 +25,6 @@ namespace WorkerService1
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            Dictionary<string, string> cities = new Dictionary<string, string>();
-            cities.Add("Total", "");
-            cities.Add("Wrocław", "wroclaw");
-            cities.Add("Gdańsk", "gdansk");
-            cities.Add("Warszawa", "warszawa");
-            cities.Add("Kraków", "krakow");
-            cities.Add("Poznań", "poznan");
-            cities.Add("Lodz", "lodz");
-
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
@@ -40,13 +32,13 @@ namespace WorkerService1
                 List<CsvRow> records = new List<CsvRow>();
                 CsvRow newRow = new CsvRow();
 
-                foreach (var city in cities)
+                foreach (var city in Cities.GetCities())
                 {
                     try
                     {
-                        var serachString = city.Value;
+                        var serachString = city;
 
-                        if (!string.IsNullOrWhiteSpace(city.Value))
+                        if (!string.IsNullOrWhiteSpace(city))
                         {
                             serachString = $"{serachString}/";
                         }
@@ -69,33 +61,33 @@ namespace WorkerService1
 
                         newRow.Date = DateTime.Now.Date;
 
-                        switch(city.Key)
+                        switch(city)
                         {
-                            case "Total":
+                            case Cities.Total:
                                 newRow.TotalToRent = rentCount;
                                 newRow.TotalToSell = sellCount;
                                 break;
-                            case "Wrocław":
+                            case Cities.Wroclaw:
                                 newRow.WroclawToRent = rentCount;
                                 newRow.WroclawToSell = sellCount;
                                 break;
-                            case "Gdańsk":
+                            case Cities.Gdansk:
                                 newRow.GdanskToRent = rentCount;
                                 newRow.GdanskToSell = sellCount;
                                 break;
-                            case "Warszawa":
+                            case Cities.Warszawa:
                                 newRow.WarszawaToRent = rentCount;
                                 newRow.WarszawaToSell = sellCount;
                                 break;
-                            case "Kraków":
+                            case Cities.Krakow:
                                 newRow.KrakowToRent = rentCount;
                                 newRow.KrakowToSell = sellCount;
                                 break;
-                            case "Poznań":
+                            case Cities.Poznan:
                                 newRow.PoznanToRent = rentCount;
                                 newRow.PoznanToSell = sellCount;
                                 break;
-                            case "Lodz":
+                            case Cities.Lodz:
                                 newRow.LodzToRent = rentCount;
                                 newRow.LodzToSell = sellCount;
                                 break;
@@ -135,9 +127,12 @@ namespace WorkerService1
                         csv.WriteRecords(records);
                     }
                 }
-                
-                
-                await Task.Delay(1000*60*60*24, stoppingToken);
+
+                int delay = 1000 * 60 * 60 * 24; //day
+                //int delay = 1000 ; //minute
+
+
+                await Task.Delay(delay, stoppingToken);
             }
         }
     }
