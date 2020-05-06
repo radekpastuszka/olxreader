@@ -6,7 +6,7 @@ namespace WorkerService1.Models
 {
     class CsvRow
     {
-        public DateTime Date { get; set; }
+        public string Date { get; set; }
         public int WroclawToRent { get; set; }
         public int WroclawToSell { get; set; }
         public int GdanskToRent { get; set; }

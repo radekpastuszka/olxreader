@@ -30,47 +30,46 @@ namespace WorkerService1
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
                 CsvRow newRow = new CsvRow();
-
-                foreach (var city in Cities.GetCities())
-                {
-                    try
-                    {
-                        (int rentCount, int sellCount) = ReadDataFromOlx(city);
-                        newRow = GetNewRowData(newRow, city, rentCount, sellCount);
-
-                    }
-                    catch (Exception ex)
-                    {
-                        _logger.LogInformation(ex.Message, DateTimeOffset.Now);
-                    }
-                }
+                newRow.Date = DateTime.Now.Date.ToShortDateString();
 
                 string path = new FileInfo(AppDomain.CurrentDomain.BaseDirectory).Directory.Parent.Parent.Parent.FullName;
                 string olxRentCsv = $"{path}/olxData.csv";
 
                 List<CsvRow> records = ReadCSVOldData(olxRentCsv);
 
-                SaveCSVData(records, newRow, olxRentCsv);
+                if (!records.Any(x => x.Date == newRow.Date))
+                {
+                    foreach (var city in Cities.GetCities())
+                    {
+                        try
+                        {
+                            (int rentCount, int sellCount) = ReadDataFromOlx(city);
+                            newRow = GetNewRowData(newRow, city, rentCount, sellCount);
 
-                int delay = 1000 * 60 * 60 * 24; //day
-                //int delay = 1000 ; //sec
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogInformation(ex.Message, DateTimeOffset.Now);
+                        }
+                    }
 
+                    SaveCSVData(records, newRow, olxRentCsv);
+                }
 
+                int delay = 1000 * 60 * 60 *24;
+               
                 await Task.Delay(delay, stoppingToken);
             }
         }
 
         private static void SaveCSVData(List<CsvRow> records, CsvRow newRow, string olxRentCsv)
         {
-            if (!records.Any(x => x.Date == newRow.Date))
-            {
-                records.Add(newRow);
+            records.Add(newRow);
 
-                using (var writer = new StreamWriter(olxRentCsv))
-                using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                {
-                    csv.WriteRecords(records);
-                }
+            using (var writer = new StreamWriter(olxRentCsv))
+            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+            {
+                csv.WriteRecords(records);
             }
         }
 
@@ -91,8 +90,6 @@ namespace WorkerService1
 
         private static CsvRow GetNewRowData(CsvRow newRow, string city, int rentCount, int sellCount)
         {
-            newRow.Date = DateTime.Now.Date;
-
             switch (city)
             {
                 case Cities.Total:
