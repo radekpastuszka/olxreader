@@ -11,16 +11,21 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WorkerService1.Constants;
 using WorkerService1.Models;
+using WorkerService1.Utilities;
 
 namespace WorkerService1
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
+        private readonly IHostEnvironment _env;
+        private readonly ILocalCSVHelper _localCSVHelper;
 
-        public Worker(ILogger<Worker> logger)
+        public Worker(ILogger<Worker> logger, IHostEnvironment env, ILocalCSVHelper localCSVHelper)
         {
             _logger = logger;
+            _env = env;
+            _localCSVHelper = localCSVHelper;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -30,12 +35,12 @@ namespace WorkerService1
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
                 CsvRow newRow = new CsvRow();
-                newRow.Date = DateTime.Now.Date.ToShortDateString();
+                newRow.Date = DateTime.Now.Date.ToString("dd.MM.yyyy");
 
-                string path = new FileInfo(AppDomain.CurrentDomain.BaseDirectory).Directory.Parent.Parent.Parent.FullName;
+                string path = _env.ContentRootPath;
                 string olxRentCsv = $"{path}/olxData.csv";
 
-                List<CsvRow> records = ReadCSVOldData(olxRentCsv);
+                List<CsvRow> records = _localCSVHelper.ReadCSVOldData(olxRentCsv);
 
                 if (!records.Any(x => x.Date == newRow.Date))
                 {
@@ -53,39 +58,13 @@ namespace WorkerService1
                         }
                     }
 
-                    SaveCSVData(records, newRow, olxRentCsv);
+                    _localCSVHelper.SaveCSVData(records, newRow, olxRentCsv);
                 }
 
                 int delay = 1000 * 60 * 60 *24;
                
                 await Task.Delay(delay, stoppingToken);
             }
-        }
-
-        private static void SaveCSVData(List<CsvRow> records, CsvRow newRow, string olxRentCsv)
-        {
-            records.Add(newRow);
-
-            using (var writer = new StreamWriter(olxRentCsv))
-            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-            {
-                csv.WriteRecords(records);
-            }
-        }
-
-        private static List<CsvRow> ReadCSVOldData(string olxRentCsv)
-        {
-            List<CsvRow> records = new List<CsvRow>();
-            if (File.Exists(olxRentCsv))
-            {
-                using (var reader = new StreamReader(olxRentCsv))
-                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                {
-                    records = csv.GetRecords<CsvRow>().ToList();
-                }
-            }
-
-            return records;
         }
 
         private static CsvRow GetNewRowData(CsvRow newRow, string city, int rentCount, int sellCount)

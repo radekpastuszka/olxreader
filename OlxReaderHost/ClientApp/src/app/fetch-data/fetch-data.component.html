@@ -1,0 +1,22 @@
+<h1 id="tableLabel">Olx data</h1>
+
+<p>This component demonstrates fetching data from the server.</p>
+
+<p *ngIf="!olxdata"><em>Loading...</em></p>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="olxdata">
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>WroclawToRent</th>
+      <th>WroclawToSell</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let olxRow of olxdata">
+      <td>{{ olxRow.date }}</td>
+      <td>{{ olxRow.wroclawToRent }}</td>
+      <td>{{ olxRow.wroclawToSell }}</td>
+    </tr>
+  </tbody>
+</table>

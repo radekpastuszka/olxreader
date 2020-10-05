@@ -4,7 +4,7 @@ using System.Text;
 
 namespace WorkerService1.Models
 {
-    class CsvRow
+    public class CsvRow
     {
         public string Date { get; set; }
         public int WroclawToRent { get; set; }

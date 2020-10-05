@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
-using WorkerService1.Utilities;
+using Microsoft.Extensions.Logging;
 
-namespace WorkerService1
+namespace OlxReaderHost
 {
     public class Program
     {
@@ -17,10 +18,9 @@ namespace WorkerService1
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) =>
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    services.AddSingleton<ILocalCSVHelper, LocalCSVHelper>();
-                    services.AddHostedService<Worker>();
+                    webBuilder.UseStartup<Startup>();
                 });
     }
 }
