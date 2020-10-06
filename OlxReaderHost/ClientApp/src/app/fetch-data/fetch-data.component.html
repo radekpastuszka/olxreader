@@ -1,6 +1,4 @@
-<h1 id="tableLabel">Olx data</h1>
-
-<p>This component demonstrates fetching data from the server.</p>
+<h1 id="tableLabel">{{city}}</h1>
 
 <p *ngIf="!olxdata"><em>Loading...</em></p>
 
@@ -8,15 +6,15 @@
   <thead>
     <tr>
       <th>Data</th>
-      <th>WroclawToRent</th>
-      <th>WroclawToSell</th>
+      <th>Na sprzedaż</th>
+      <th>Do wynajęcia</th>
     </tr>
   </thead>
   <tbody>
     <tr *ngFor="let olxRow of olxdata">
-      <td>{{ olxRow.date }}</td>
-      <td>{{ olxRow.wroclawToRent }}</td>
-      <td>{{ olxRow.wroclawToSell }}</td>
+      <td>{{ olxRow.date | date :'dd.MM.yyyy' }}</td>
+      <td>{{ olxRow.toSell }}</td>
+      <td>{{ olxRow.toRent }}</td>
     </tr>
   </tbody>
 </table>

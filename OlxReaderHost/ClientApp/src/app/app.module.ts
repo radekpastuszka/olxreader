@@ -25,8 +25,8 @@ import { FetchDataComponent } from './fetch-data/fetch-data.component';
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
-      { path: 'fetch-data', component: FetchDataComponent },
-    ])
+      { path: 'olx-data/:dataType', component: FetchDataComponent },
+    ], { onSameUrlNavigation: 'reload' })
   ],
   providers: [],
   bootstrap: [AppComponent]
