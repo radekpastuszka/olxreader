@@ -2,6 +2,9 @@
 
 <p *ngIf="!olxdata"><em>Loading...</em></p>
 
+<apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [title]="chartOptions.title"></apx-chart>
+
+
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="olxdata">
   <thead>
     <tr>
