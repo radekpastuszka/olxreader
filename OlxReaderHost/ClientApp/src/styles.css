@@ -14,3 +14,7 @@ code {
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
+
+li.link-active a.nav-link.text-dark {
+  color: #007fe0 !important;
+}

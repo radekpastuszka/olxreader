@@ -25,7 +25,7 @@ export class FetchDataComponent implements OnInit {
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private actRoute: ActivatedRoute, private router: Router) {
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => { return false; };
-    this.dataType = this.actRoute.snapshot.params.dataType;
+    this.dataType = parseInt(this.actRoute.snapshot.params.dataType);
 
     this.chartOptions = {
       series: [{
@@ -33,17 +33,21 @@ export class FetchDataComponent implements OnInit {
         data: []
       }],
       chart: {
-        height: 350,
-        type: "line"
+        height: 600,
+        type: "area"
+      },
+      dataLabels: {
+        enabled: false
       },
       title: {
         text: "Wrocław"
       },
+      stroke: {
+        width: 1,
+        curve: "smooth"
+      },
       xaxis: {
-        type: 'datetime',
-        labels: {
-          format: 'dd/MM',
-        }
+        type: 'datetime'
       }
     };
 
@@ -60,15 +64,23 @@ export class FetchDataComponent implements OnInit {
         return { x: new Date(obj.date).toLocaleDateString(), y: obj.toSell };
       });
 
-      this.chartOptions.title.text = this.city;
+
+      this.city = this.getDataTypeName(this.dataType);
 
       this.chartOptions.series = [{
         name: "Do wynajęcia",
         data: toRent
-        }]
+      }, {
+          name: "Do sprzedaży",
+          data: toSell
+        }];
+
+      this.chartOptions.title = {
+        text: this.city
+      }
     }, error => console.error(error));
 
-    this.city = this.getDataTypeName(this.dataType);
+    
   }
 
   ngOnInit() {

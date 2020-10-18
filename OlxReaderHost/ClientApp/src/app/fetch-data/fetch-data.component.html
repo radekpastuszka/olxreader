@@ -1,11 +1,9 @@
-<h1 id="tableLabel">{{city}}</h1>
-
 <p *ngIf="!olxdata"><em>Loading...</em></p>
 
-<apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [title]="chartOptions.title"></apx-chart>
+<apx-chart [series]="chartOptions.series" [chart]="chartOptions.chart" [title]="chartOptions.title" [stroke]="chartOptions.stroke" [dataLabels]="chartOptions.dataLabels"></apx-chart>
 
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="olxdata">
+<!--<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="olxdata">
   <thead>
     <tr>
       <th>Data</th>
@@ -20,4 +18,4 @@
       <td>{{ olxRow.toRent }}</td>
     </tr>
   </tbody>
-</table>
+</table>-->
