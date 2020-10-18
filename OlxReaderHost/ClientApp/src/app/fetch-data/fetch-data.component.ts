@@ -72,7 +72,7 @@ export class FetchDataComponent implements OnInit {
   }
 
   ngOnInit() {
-    
+    console.log(1);
   }
 
   getDataTypeName(dataType: number): string {
