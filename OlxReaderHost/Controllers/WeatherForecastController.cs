@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
@@ -36,7 +37,7 @@ namespace OlxReaderHost.Controllers
 
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
-                Date = Convert.ToDateTime(x.Date),
+                Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
                 DataType = DataTypeEnum.All,
                 ToSell = x.TotalToSell,
                 ToRent = x.TotalToRent
@@ -44,7 +45,7 @@ namespace OlxReaderHost.Controllers
 
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
-                Date = Convert.ToDateTime(x.Date),
+                Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
                 DataType = DataTypeEnum.Wroclaw,
                 ToSell = x.WroclawToSell,
                 ToRent = x.WroclawToRent
@@ -52,7 +53,7 @@ namespace OlxReaderHost.Controllers
 
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
-                Date = Convert.ToDateTime(x.Date),
+                Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
                 DataType = DataTypeEnum.Gdansk,
                 ToSell = x.GdanskToSell,
                 ToRent = x.GdanskToRent
@@ -60,7 +61,7 @@ namespace OlxReaderHost.Controllers
 
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
-                Date = Convert.ToDateTime(x.Date),
+                Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
                 DataType = DataTypeEnum.Warszawa,
                 ToSell = x.WarszawaToSell,
                 ToRent = x.WarszawaToRent
@@ -68,7 +69,7 @@ namespace OlxReaderHost.Controllers
 
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
-                Date = Convert.ToDateTime(x.Date),
+                Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
                 DataType = DataTypeEnum.Krakow,
                 ToSell = x.KrakowToSell,
                 ToRent = x.KrakowToRent
@@ -76,7 +77,7 @@ namespace OlxReaderHost.Controllers
 
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
-                Date = Convert.ToDateTime(x.Date),
+                Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
                 DataType = DataTypeEnum.Poznan,
                 ToSell = x.PoznanToSell,
                 ToRent = x.PoznanToRent
@@ -84,7 +85,7 @@ namespace OlxReaderHost.Controllers
 
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
-                Date = Convert.ToDateTime(x.Date),
+                Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
                 DataType = DataTypeEnum.Lodz,
                 ToSell = x.LodzToSell,
                 ToRent = x.LodzToRent
