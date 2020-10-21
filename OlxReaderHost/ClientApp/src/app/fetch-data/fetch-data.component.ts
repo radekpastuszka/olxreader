@@ -1,6 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Constants } from '../model/constants';
 
 @Component({
   selector: 'app-fetch-data',
@@ -10,59 +11,67 @@ export class FetchDataComponent {
   public olxdata: OlxDataDto[];
   city: string;
   chartOptions: any;
+  cityExist: boolean;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private actRoute: ActivatedRoute, private router: Router) {
 
     this.router.routeReuseStrategy.shouldReuseRoute = () => { return false; };
-    this.city = this.actRoute.snapshot.params.city || "";
+    this.city = this.actRoute.snapshot.params.city || "wszystkie";
+    this.cityExist = Constants.Cities.map(function (x) {
+      return x.toLowerCase();
+    }).includes(this.city);
 
-    this.chartOptions = {
-      series: [{
-        name: "ToSell",
-        data: []
-      }],
-      chart: {
-        height: 700,
-        type: "area"
-      },
-      dataLabels: {
-        enabled: false
-      },
-      title: {
-        text: "Wrocław"
-      },
-      stroke: {
-        width: 1,
-        curve: "smooth"
-      },
-      xaxis: {
-        type: 'datetime'
-      }
+      this.chartOptions = {
+        series: [{
+          name: "ToSell",
+          data: []
+        }],
+        chart: {
+          height: 600,
+          type: "area"
+        },
+        dataLabels: {
+          enabled: false
+        },
+        title: {
+          text: "Brak danych"
+        },
+        stroke: {
+          width: 1,
+          curve: "smooth"
+        },
+        xaxis: {
+          type: 'datetime'
+        }
     };
 
-    http.get<OlxDataDto[]>(baseUrl + 'olxdata?city=' + this.city).subscribe(result => {
-      this.olxdata = result;
+    if (this.cityExist) {
 
-      const toRent = this.olxdata.map(function (obj) {
-        return { x: new Date(obj.date).toLocaleDateString(), y: obj.toRent };
-      });
+      http.get<OlxDataDto[]>(baseUrl + 'olxdata?city=' + this.city).subscribe(result => {
+        this.olxdata = result;
 
-      const toSell = this.olxdata.map(function (obj) {
-        return { x: new Date(obj.date).toLocaleDateString(), y: obj.toSell };
-      });
+        const toRent = this.olxdata.map(function (obj) {
+          return { x: new Date(obj.date).toLocaleDateString(), y: obj.toRent };
+        });
 
-      this.chartOptions.series = [{
-        name: "Do wynajęcia",
-        data: toRent
-      }, {
+        const toSell = this.olxdata.map(function (obj) {
+          return { x: new Date(obj.date).toLocaleDateString(), y: obj.toSell };
+        });
+
+        this.chartOptions.series = [{
+          name: "Do wynajęcia",
+          data: toRent
+        },
+        {
           name: "Do sprzedaży",
           data: toSell
         }];
 
-      this.chartOptions.title = {
-        text: this.city
-      }
-    }, error => console.error(error));
+        this.chartOptions.title = {
+          text: this.city.charAt(0).toUpperCase() + this.city.slice(1)
+        };
+      }, error => console.error(error));
+    }
   }
 }
 

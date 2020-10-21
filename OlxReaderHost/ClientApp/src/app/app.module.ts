@@ -7,7 +7,6 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
-import { CounterComponent } from './counter/counter.component';
 import { FetchDataComponent } from './fetch-data/fetch-data.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
 
@@ -16,7 +15,6 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     AppComponent,
     NavMenuComponent,
     HomeComponent,
-    CounterComponent,
     FetchDataComponent
   ],
   imports: [
@@ -25,9 +23,9 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: FetchDataComponent, pathMatch: 'full' },
-      { path: 'counter', component: CounterComponent },
+      { path: '', redirectTo: '/olx-data/wszystkie', pathMatch: 'full' },
       { path: 'olx-data/:city', component: FetchDataComponent },
+      
     ], { onSameUrlNavigation: 'reload' })
   ],
   providers: [],

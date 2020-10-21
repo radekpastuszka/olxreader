@@ -1,7 +1,7 @@
 <header>
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">OLXData</a>
+      <a class="navbar-brand" [routerLink]="['/']">OLX Mieszkania</a>
       <button class="navbar-toggler"
               type="button"
               data-toggle="collapse"
@@ -14,28 +14,9 @@
       <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse"
            [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'all']">Wszystkie</a>
+          <li class="nav-item" [routerLinkActive]="['link-active']" *ngFor="let city of cities">
+            <a class="nav-link text-dark" [routerLink]="['/olx-data', city.toLowerCase()]">{{city}}</a>
           </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'wrocław']">Wrocław</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'gdańsk']">Gdańsk</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'warszawa']">Warszawa</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'kraków']">Kraków</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'poznań']">Poznań</a>
-          </li>
-          <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'łódź']">Łódź</a>
-          </li>
-
         </ul>
       </div>
     </div>

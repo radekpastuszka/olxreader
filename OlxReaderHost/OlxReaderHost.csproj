@@ -24,7 +24,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Remove="ClientApp\src\app\model\constants.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\WorkerService1\WorkerService1.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\app\model\constants.ts" />
   </ItemGroup>
 
   <ItemGroup>

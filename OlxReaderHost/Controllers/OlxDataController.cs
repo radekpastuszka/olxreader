@@ -37,13 +37,13 @@ namespace OlxReaderHost.Controllers
 
             if(string.IsNullOrWhiteSpace(city))
             {
-                city = "all";
+                city = "Wszystkie";
             }
 
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
                 Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                City = "all",
+                City = "Wszystkie",
                 ToSell = x.TotalToSell,
                 ToRent = x.TotalToRent
             }));

@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Constants } from '../model/constants';
 
 @Component({
   selector: 'app-nav-menu',
@@ -7,6 +8,7 @@ import { Component } from '@angular/core';
 })
 export class NavMenuComponent {
   isExpanded = false;
+  cities: string[] = Constants.Cities;
 
   collapse() {
     this.isExpanded = false;
