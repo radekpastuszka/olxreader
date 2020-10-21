@@ -25,9 +25,9 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: '', component: FetchDataComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
-      { path: 'olx-data/:dataType', component: FetchDataComponent },
+      { path: 'olx-data/:city', component: FetchDataComponent },
     ], { onSameUrlNavigation: 'reload' })
   ],
   providers: [],

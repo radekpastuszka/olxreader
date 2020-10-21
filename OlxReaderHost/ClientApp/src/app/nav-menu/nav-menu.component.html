@@ -1,7 +1,7 @@
 <header>
   <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
     <div class="container">
-      <a class="navbar-brand" [routerLink]="['/']">Liczba ogłoszeń mieszkań na OLX</a>
+      <a class="navbar-brand" [routerLink]="['/']">OLXData</a>
       <button class="navbar-toggler"
               type="button"
               data-toggle="collapse"
@@ -15,26 +15,27 @@
            [ngClass]="{ show: isExpanded }">
         <ul class="navbar-nav flex-grow">
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 1]">Wrocław</a>
+            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'all']">Wszystkie</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 2]">Gdańsk</a>
+            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'wrocław']">Wrocław</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 3]">Warszawa</a>
+            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'gdańsk']">Gdańsk</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 4]">Kraków</a>
+            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'warszawa']">Warszawa</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 5]">Poznań</a>
+            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'kraków']">Kraków</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 6]">Łódź</a>
+            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'poznań']">Poznań</a>
           </li>
           <li class="nav-item" [routerLinkActive]="['link-active']">
-            <a class="nav-link text-dark" [routerLink]="['/olx-data', 0]">Wszystkie</a>
+            <a class="nav-link text-dark" [routerLink]="['/olx-data', 'łódź']">Łódź</a>
           </li>
+
         </ul>
       </div>
     </div>

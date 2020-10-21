@@ -13,13 +13,13 @@ namespace OlxReaderHost.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class WeatherForecastController : ControllerBase
+    public class OlxDataController : ControllerBase
     {
-        private readonly ILogger<WeatherForecastController> _logger;
+        private readonly ILogger<OlxDataController> _logger;
         private readonly IHostEnvironment _env;
         private readonly ILocalCSVHelper _localCSVHelper;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger, IHostEnvironment env, ILocalCSVHelper localCSVHelper)
+        public OlxDataController(ILogger<OlxDataController> logger, IHostEnvironment env, ILocalCSVHelper localCSVHelper)
         {
             _logger = logger;
             _env = env;
@@ -27,7 +27,7 @@ namespace OlxReaderHost.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<OlxDataDto> Get(DataTypeEnum dataType)
+        public IEnumerable<OlxDataDto> Get(string city)
         {
             string olxRentCsv = $"{_env.ContentRootPath}/olxData.csv";
 
@@ -35,10 +35,15 @@ namespace OlxReaderHost.Controllers
 
             List<OlxDataDto> toReturn= new List<OlxDataDto>();
 
+            if(string.IsNullOrWhiteSpace(city))
+            {
+                city = "all";
+            }
+
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
                 Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                DataType = DataTypeEnum.All,
+                City = "all",
                 ToSell = x.TotalToSell,
                 ToRent = x.TotalToRent
             }));
@@ -46,7 +51,7 @@ namespace OlxReaderHost.Controllers
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
                 Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                DataType = DataTypeEnum.Wroclaw,
+                City = "Wrocław",
                 ToSell = x.WroclawToSell,
                 ToRent = x.WroclawToRent
             }));
@@ -54,7 +59,7 @@ namespace OlxReaderHost.Controllers
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
                 Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                DataType = DataTypeEnum.Gdansk,
+                City = "Gdańsk",
                 ToSell = x.GdanskToSell,
                 ToRent = x.GdanskToRent
             }));
@@ -62,7 +67,7 @@ namespace OlxReaderHost.Controllers
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
                 Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                DataType = DataTypeEnum.Warszawa,
+                City = "Warszawa",
                 ToSell = x.WarszawaToSell,
                 ToRent = x.WarszawaToRent
             }));
@@ -70,7 +75,7 @@ namespace OlxReaderHost.Controllers
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
                 Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                DataType = DataTypeEnum.Krakow,
+                City = "Kraków",
                 ToSell = x.KrakowToSell,
                 ToRent = x.KrakowToRent
             }));
@@ -78,7 +83,7 @@ namespace OlxReaderHost.Controllers
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
                 Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                DataType = DataTypeEnum.Poznan,
+                City = "Poznań",
                 ToSell = x.PoznanToSell,
                 ToRent = x.PoznanToRent
             }));
@@ -86,13 +91,14 @@ namespace OlxReaderHost.Controllers
             toReturn.AddRange(records.Select(x => new OlxDataDto()
             {
                 Date = DateTime.ParseExact(x.Date, "dd.MM.yyyy", CultureInfo.CurrentCulture),
-                DataType = DataTypeEnum.Lodz,
+                City = "Łódź",
                 ToSell = x.LodzToSell,
                 ToRent = x.LodzToRent
             }));
 
 
-            return toReturn.Where(x=> x.DataType == dataType);
+            var olxData = toReturn.Where(x=> x.City.ToLower() == city.ToLower());
+            return olxData;
         }
     }
 }
