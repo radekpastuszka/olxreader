@@ -1,6 +1,6 @@
 <p *ngIf="!olxdata"><em>Loading...</em></p>
 
-<apx-chart *ngIf="olxdata" [series]="chartOptions.series" [chart]="chartOptions.chart" [title]="chartOptions.title" [stroke]="chartOptions.stroke" [dataLabels]="chartOptions.dataLabels"></apx-chart>
+<apx-chart *ngIf="olxdata" [tooltip]="chartOptions.tooltip" [annotations]="chartOptions.annotations" [series]="chartOptions.series" [chart]="chartOptions.chart" [title]="chartOptions.title" [stroke]="chartOptions.stroke" [dataLabels]="chartOptions.dataLabels"></apx-chart>
 
 
 <!--<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="olxdata">

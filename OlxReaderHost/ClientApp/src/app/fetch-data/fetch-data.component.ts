@@ -2,11 +2,25 @@ import { Component, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Constants } from '../model/constants';
+import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexTitleSubtitle, ApexTooltip, ApexStroke, ApexAnnotations } from 'ng-apexcharts';
+
+export type ChartOptions = {
+  series: ApexAxisChartSeries;
+  chart: ApexChart;
+  dataLabels: ApexDataLabels;
+  title: ApexTitleSubtitle;
+  tooltip: ApexTooltip;
+  stroke: ApexStroke;
+  annotations: ApexAnnotations;
+  colors: any;
+  toolbar: any;
+};
 
 @Component({
   selector: 'app-fetch-data',
   templateUrl: './fetch-data.component.html'
 })
+
 export class FetchDataComponent {
   public olxdata: OlxDataDto[];
   city: string;
@@ -70,6 +84,89 @@ export class FetchDataComponent {
         this.chartOptions.title = {
           text: this.city.charAt(0).toUpperCase() + this.city.slice(1)
         };
+
+        const sortedToRent = [...toRent].sort(function (a, b) {
+          return a.y - b.y;
+        });
+
+        const sortedToSell = [...toSell].sort(function (a, b) {
+          return a.y - b.y;
+        });
+
+        this.chartOptions.annotations = {
+          //xaxis: [
+          //  {
+          //    x: sortedToRent[sortedToRent.length - 1].x,
+          //    strokeDashArray: 5,
+          //    borderColor: "#008ffb",
+          //    label: {
+          //      borderColor: "#008ffb",
+          //      style: {
+          //        color: "#fff",
+          //        background: "#008ffb"
+          //      },
+          //      text: "Max wynajem"
+          //    }
+          //  },
+          //  {
+          //    x: sortedToSell[sortedToSell.length - 1].x,
+          //    strokeDashArray: 5,
+          //    borderColor: "#37d189",
+          //    label: {
+          //      borderColor: "#37d189",
+          //      style: {
+          //        color: "#fff",
+          //        background: "#37d189"
+          //      },
+          //      text: "Max sprzedaż"
+          //    }
+          //  }],
+          points: [
+            {
+              x: sortedToRent[sortedToRent.length - 1].x,
+              y: sortedToRent[sortedToRent.length - 1].y,
+              marker: {
+                size: 2,
+                fillColor: "#fff",
+                strokeColor: "red",
+                radius: 1,
+                cssClass: "apexcharts-custom-class"
+              },
+              label: {
+                borderColor: "#FF4560",
+                offsetY: 0,
+                style: {
+                  color: "#fff",
+                  background: "#FF4560"
+                },
+
+                text: "Max wynajem"
+              }
+            },
+            {
+              x: sortedToSell[sortedToSell.length - 1].x,
+              y: sortedToSell[sortedToSell.length - 1].y,
+              marker: {
+                size: 2,
+                fillColor: "#fff",
+                strokeColor: "red",
+                radius: 1,
+                cssClass: "apexcharts-custom-class"
+              },
+              label: {
+                borderColor: "#FF4560",
+                offsetY: 0,
+                style: {
+                  color: "#fff",
+                  background: "#FF4560"
+                },
+
+                text: "Max sprzedaż"
+              }
+            }
+          ]
+        }
+
       }, error => console.error(error));
     }
   }
