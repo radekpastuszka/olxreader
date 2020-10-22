@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CsvHelper;
 using HtmlAgilityPack;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -20,6 +17,7 @@ namespace WorkerService1
         private readonly ILogger<Worker> _logger;
         private readonly IHostEnvironment _env;
         private readonly ILocalCSVHelper _localCSVHelper;
+        private DateTime? lastRun;
 
         public Worker(ILogger<Worker> logger, IHostEnvironment env, ILocalCSVHelper localCSVHelper)
         {
@@ -32,37 +30,42 @@ namespace WorkerService1
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-
-                CsvRow newRow = new CsvRow();
-                newRow.Date = DateTime.Now.Date.ToString("dd.MM.yyyy");
-
-                string path = _env.ContentRootPath;
-                string olxRentCsv = $"{path}/olxData.csv";
-
-                List<CsvRow> records = _localCSVHelper.ReadCSVOldData(olxRentCsv);
-
-                if (!records.Any(x => x.Date == newRow.Date))
+                if (!lastRun.HasValue || (lastRun.HasValue && !lastRun.Value.Equals(DateTime.Now.Date)))
                 {
-                    foreach (var city in Cities.GetCities())
+                    lastRun = DateTime.Now.Date;
+
+                    _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
+
+                    CsvRow newRow = new CsvRow();
+                    newRow.Date = DateTime.Now.Date.ToString("dd.MM.yyyy");
+
+                    string path = _env.ContentRootPath;
+                    string olxRentCsv = $"{path}/olxData.csv";
+
+                    List<CsvRow> records = _localCSVHelper.ReadCSVOldData(olxRentCsv);
+
+                    if (!records.Any(x => x.Date == newRow.Date))
                     {
-                        try
+                        foreach (var city in Cities.GetCities())
                         {
-                            (int rentCount, int sellCount) = ReadDataFromOlx(city);
-                            newRow = GetNewRowData(newRow, city, rentCount, sellCount);
+                            try
+                            {
+                                (int rentCount, int sellCount) = ReadDataFromOlx(city);
+                                newRow = GetNewRowData(newRow, city, rentCount, sellCount);
 
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogInformation(ex.Message, DateTimeOffset.Now);
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            _logger.LogInformation(ex.Message, DateTimeOffset.Now);
-                        }
+
+                        _localCSVHelper.SaveCSVData(records, newRow, olxRentCsv);
                     }
-
-                    _localCSVHelper.SaveCSVData(records, newRow, olxRentCsv);
                 }
 
-                int delay = 1000 * 60 * 60 *24;
-               
+                int delay = 1000 * 60 * 60 * 1; //1h
+
                 await Task.Delay(delay, stoppingToken);
             }
         }
