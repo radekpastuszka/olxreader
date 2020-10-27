@@ -25,6 +25,7 @@ export class FetchDataComponent {
   public olxdata: OlxDataDto[];
   city: string;
   chartOptions: any;
+  chartOptions2: any;
   cityExist: boolean;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string, private actRoute: ActivatedRoute, private router: Router) {
@@ -75,14 +76,10 @@ export class FetchDataComponent {
         this.chartOptions.series = [{
           name: "Do wynajęcia",
           data: toRent
-        },
-        {
-          name: "Do sprzedaży",
-          data: toSell
         }];
 
         this.chartOptions.title = {
-          text: this.city.charAt(0).toUpperCase() + this.city.slice(1)
+          text: this.city.charAt(0).toUpperCase() + this.city.slice(1) + " - do wynajęcia"
         };
 
         const sortedToRent = [...toRent].sort(function (a, b) {
@@ -94,33 +91,6 @@ export class FetchDataComponent {
         });
 
         this.chartOptions.annotations = {
-          //xaxis: [
-          //  {
-          //    x: sortedToRent[sortedToRent.length - 1].x,
-          //    strokeDashArray: 5,
-          //    borderColor: "#008ffb",
-          //    label: {
-          //      borderColor: "#008ffb",
-          //      style: {
-          //        color: "#fff",
-          //        background: "#008ffb"
-          //      },
-          //      text: "Max wynajem"
-          //    }
-          //  },
-          //  {
-          //    x: sortedToSell[sortedToSell.length - 1].x,
-          //    strokeDashArray: 5,
-          //    borderColor: "#37d189",
-          //    label: {
-          //      borderColor: "#37d189",
-          //      style: {
-          //        color: "#fff",
-          //        background: "#37d189"
-          //      },
-          //      text: "Max sprzedaż"
-          //    }
-          //  }],
           points: [
             {
               x: sortedToRent[sortedToRent.length - 1].x,
@@ -142,7 +112,23 @@ export class FetchDataComponent {
 
                 text: "Max wynajem"
               }
-            },
+            }
+          ]
+        }
+
+        this.chartOptions2 = { ...this.chartOptions };
+
+        this.chartOptions2.series = [{
+          name: "Do sprzedaży",
+          data: toSell
+        }];
+
+        this.chartOptions2.title = {
+          text: this.city.charAt(0).toUpperCase() + this.city.slice(1) + " - do sprzedaży"
+        };
+
+        this.chartOptions2.annotations = {
+          points: [
             {
               x: sortedToSell[sortedToSell.length - 1].x,
               y: sortedToSell[sortedToSell.length - 1].y,
@@ -165,7 +151,9 @@ export class FetchDataComponent {
               }
             }
           ]
-        }
+        };
+
+
 
       }, error => console.error(error));
     }

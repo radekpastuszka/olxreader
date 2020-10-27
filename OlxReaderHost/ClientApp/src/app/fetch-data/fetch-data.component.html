@@ -1,21 +1,5 @@
 <p *ngIf="!olxdata"><em>Loading...</em></p>
 
 <apx-chart *ngIf="olxdata" [tooltip]="chartOptions.tooltip" [annotations]="chartOptions.annotations" [series]="chartOptions.series" [chart]="chartOptions.chart" [title]="chartOptions.title" [stroke]="chartOptions.stroke" [dataLabels]="chartOptions.dataLabels"></apx-chart>
+<apx-chart *ngIf="olxdata" [tooltip]="chartOptions2.tooltip" [annotations]="chartOptions2.annotations" [series]="chartOptions2.series" [chart]="chartOptions2.chart" [title]="chartOptions2.title" [stroke]="chartOptions2.stroke" [dataLabels]="chartOptions2.dataLabels"></apx-chart>
 
-
-<!--<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="olxdata">
-  <thead>
-    <tr>
-      <th>Data</th>
-      <th>Na sprzedaż</th>
-      <th>Do wynajęcia</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let olxRow of olxdata">
-      <td>{{ olxRow.date | date :'dd.MM.yyyy' }}</td>
-      <td>{{ olxRow.toSell }}</td>
-      <td>{{ olxRow.toRent }}</td>
-    </tr>
-  </tbody>
-</table>-->
